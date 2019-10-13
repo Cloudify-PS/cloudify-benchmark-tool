@@ -16,4 +16,4 @@ then :
 
 # Running the tool
 to start running the tool :
-``` python CBT.py --config-path config.yaml --blueprint-name [name of blueprint] --deployments-count [number of deployments to create & install] --max-threads-count [number of parallel executions to run on manager ```
+``` python CBT.py --config-path config.yaml --blueprint-name [name of blueprint] --deployments-count [number of deployments to create & install] --max-threads-count [number of parallel executions to run on manager] ```
