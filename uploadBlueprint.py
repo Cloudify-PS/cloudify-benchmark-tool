@@ -27,4 +27,4 @@ if __name__=='__main__':
 	client = CloudifyClient(host=config['manager_ip'],username=config['manager_username'],
 				password=config['manager_password'],tenant=config['manager_tenant'])
 	logging.basicConfig(level=logging.INFO)
-	client.blueprints.upload('rest-server/blueprint.yaml',parse_args.bp_name)
+	client.blueprints.upload('rest-blueprint/blueprint.yaml',parse_args.bp_name)
