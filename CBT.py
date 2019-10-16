@@ -77,7 +77,7 @@ def create_run_deployment(client,endpoint_dict,lock):
                        time.sleep(0.1)
                 try:
                         increment_executions(lock)
-                        deployment_id = blueprint_id+'-DT-'+str(current_milli_time())
+                        deployment_id = blueprint_id+'-DT-'+str(current_milli_time())+'-'+threading.current_thread().name
                         logging.info ('time start for deployment {0} is {1}'.format(deployment_id,str(time.strftime('%Y/%m/%d %H:%M:%S'))))
                         deployment = client.deployments.create(blueprint_id,deployment_id,endpoint_dict)
                         while get_workflow_status(client,deployment_id)!='terminated':
