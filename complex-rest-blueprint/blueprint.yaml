@@ -1,0 +1,284 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+imports:
+  - http://www.getcloudify.org/spec/cloudify/4.5/types.yaml
+  - plugin:cloudify-utilities-plugin
+
+inputs:
+
+  rest_endpoint:
+    description: >
+      REST API endpoint
+
+  rest_endpoint_port:
+    type: integer
+    description: >
+      REST API endpoint port
+
+node_templates:
+
+  counter1:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter2
+      - type: cloudify.relationships.depends_on
+        target: counter3
+
+  counter2:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter4
+      - type: cloudify.relationships.depends_on
+        target: counter5
+
+  counter3:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter5
+      - type: cloudify.relationships.depends_on
+        target: counter6
+
+  counter4:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter7
+      - type: cloudify.relationships.depends_on
+        target: counter8
+
+  counter5:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter8
+      - type: cloudify.relationships.depends_on
+        target: counter9
+
+  counter6:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter9
+      - type: cloudify.relationships.depends_on
+        target: counter10
+
+  counter7:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter11
+
+  counter8:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter11
+      - type: cloudify.relationships.depends_on
+        target: counter12
+
+  counter9:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter12
+      - type: cloudify.relationships.depends_on
+        target: counter13
+
+  counter10:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter13
+
+  counter11:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter14
+
+  counter12:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter14
+      - type: cloudify.relationships.depends_on
+        target: counter15
+
+  counter13:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+        configure:
+          implementation: scripts/fill_descendants.py
+          executor: central_deployment_agent
+    relationships:
+      - type: cloudify.relationships.depends_on
+        target: counter15
+
+
+  counter14:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+
+  counter15:
+    type: cloudify.rest.Requests
+    properties:
+      hosts: [{ get_input: rest_endpoint }]
+      port: { get_input: rest_endpoint_port }
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            template_file: templates/get-counter-template.yaml
+
+workflows:
+  install_nodes:
+    mapping: scripts/install_nodes_workflow.py
