@@ -137,9 +137,9 @@ if __name__=='__main__':
 	dep_for_each = max_threads/3
 	count = 0
 	for i in range(max_threads):
-                if count < dep_for_each:
+		if count < dep_for_each:
 			create_threads(threads,client,endpoint_dict,lock)
-		if count < 2*dep_for_each:
+		elif count < 2*dep_for_each:
 			create_threads(threads,client2,endpoint_dict,lock)
 		else:
 			create_threads(threads,client3,endpoint_dict,lock)
