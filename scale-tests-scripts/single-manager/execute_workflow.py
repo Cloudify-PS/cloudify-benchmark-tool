@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import time
 import yaml
 import logging
@@ -9,6 +11,7 @@ from cloudify_rest_client.executions import Execution
 
 # Global Variables
 endpoint_dict = {}
+blueprint_id = 'Counter-Test-BP'
 deployments_list = []
 errors_list = []
 deployments_count = 0
@@ -29,6 +32,10 @@ def _parse_command():
                         action='store', type=int,
                         required=True,
                         help='Maximum concurrent workflows executing')
+    parser.add_argument('--workflow', dest='workflow',
+                        action='store', type=str,
+                        required=True,
+                        help='name of the workflow you want to execute')
     return parser.parse_args()
 
 
@@ -69,7 +76,7 @@ def decrement_executions_error(lock):
     lock.release()
 
 
-def run_deployment(client, endpoint_dict, lock):
+def run_deployment(client, endpoint_dict, lock, workflow, params=None):
     global current_deployment
     global deployments_list
     global deployments_count
@@ -86,10 +93,7 @@ def run_deployment(client, endpoint_dict, lock):
                 'time start for deployment {0} is {1}'.format(
                     deployment_id, str(time.strftime('%Y/%m/%d %H:%M:%S'))))
             try:
-                client.executions.start(deployment_id, 'execute_operation', {
-                    'operation': 'cloudify.interfaces.lifecycle.start',
-                    'node_ids': ['counterOne']
-                    })
+                client.executions.start(deployment_id, workflow, params)
             except Exception as e:
                 decrement_executions_error(lock)
                 logging.info(
@@ -108,10 +112,10 @@ def run_deployment(client, endpoint_dict, lock):
                     deployment_id, str(ex)))
 
 
-def create_threads(threads, client, endpoint_dict, lock):
+def create_threads(threads, client, endpoint_dict, lock, workflow):
     x = threading.Thread(
             target=run_deployment,
-            args=(client, endpoint_dict, lock))
+            args=(client, endpoint_dict, lock, workflow))
     threads.append(x)
     x.start()
 
@@ -136,23 +140,16 @@ if __name__ == '__main__':
     parse_args = _parse_command()
     with open(parse_args.config_path) as config_file:
         config = yaml.load(config_file, yaml.Loader)
-    # rest_client to first manager from the cluster
-    client1 = CloudifyClient(
+    # rest_client to manager
+    client = CloudifyClient(
         host=config['manager_ip'], username=config['manager_username'],
-        password=config['manager_password'], tenant=config['manager_tenant'])
-    # rest_client to second manager from the cluster
-    client2 = CloudifyClient(
-        host=config['manager2_ip'], username=config['manager_username'],
-        password=config['manager_password'], tenant=config['manager_tenant'])
-    # rest_client to third manager from the cluster
-    client3 = CloudifyClient(
-        host=config['manager3_ip'], username=config['manager_username'],
         password=config['manager_password'], tenant=config['manager_tenant'])
     # rest server endpoint configuration
     endpoint_dict["rest_endpoint"] = config['rest_server']
     endpoint_dict["rest_endpoint_port"] = config['rest_server_port']
 
     max_threads = parse_args.max_threads
+    workflow = parse_args.workflow
 
     logging.basicConfig(level=logging.INFO)
     logging.info(
@@ -167,17 +164,8 @@ if __name__ == '__main__':
     lock = threading.Lock()
     logging.info("Max Threads {0}".format(max_threads))
 
-    # divide the load on clients based on max_concurrent_executions desired
-    dep_for_each = max_threads/3
-    count = 0
     for i in range(max_threads):
-        if count < dep_for_each:
-            create_threads(threads, client1, endpoint_dict, lock)
-        elif count < 2*dep_for_each:
-            create_threads(threads, client2, endpoint_dict, lock)
-        else:
-            create_threads(threads, client3, endpoint_dict, lock)
-        count = count + 1
+        create_threads(threads, client, endpoint_dict, lock, workflow)
 
     destroy_threads(threads, lock)
     logging.info(

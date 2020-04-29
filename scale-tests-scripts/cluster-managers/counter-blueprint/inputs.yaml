@@ -1,2 +1,2 @@
 rest_endpoint_port: 5000
-rest_endpoint: 10.239.3.28
+rest_endpoint: {rest_server_public_ip}

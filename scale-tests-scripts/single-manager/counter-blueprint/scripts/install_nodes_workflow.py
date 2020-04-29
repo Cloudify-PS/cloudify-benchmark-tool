@@ -1,5 +1,6 @@
-from cloudify.decorators import workflow
 from cloudify.workflows import ctx
+from cloudify.decorators import workflow
+
 
 @workflow
 def run_operation(**kwargs):
@@ -7,8 +8,10 @@ def run_operation(**kwargs):
 
     for node in ctx.nodes:
         for instance in node.instances:
-            graph.add_task(instance.execute_operation('cloudify.interfaces.lifecycle.start'))
+            graph.add_task(instance.execute_operation(
+                'cloudify.interfaces.lifecycle.start'))
 
     return graph.execute()
+
 
 run_operation()
