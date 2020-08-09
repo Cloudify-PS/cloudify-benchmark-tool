@@ -57,7 +57,7 @@ def get_workflow_status(client, deployment_id):
             break
         else:
             status = Execution.TERMINATED
-            return status
+    return status
 
 
 def increment_executions(lock):
@@ -73,9 +73,9 @@ def decrement_executions(client, deployment_id, lock):
     global currently_executing
     while get_workflow_status(client, deployment_id) != Execution.TERMINATED:
         time.sleep(2)
-        lock.acquire()
-        currently_executing = currently_executing - 1
-        lock.release()
+    lock.acquire()
+    currently_executing = currently_executing - 1
+    lock.release()
 
 
 def decrement_executions_error(lock):
@@ -151,7 +151,6 @@ def destroy_threads(threads, lock):
 
 
 if __name__ == '__main__':
-    global blueprint_id
     parse_args = _parse_command()
     with open(parse_args.config_path) as config_file:
         config = yaml.load(config_file, yaml.Loader)
